@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hungarian Webshop</title>
+    <link rel="stylesheet" href="./src/style.css">
+</head>
+
+<body>
+    <nav class="site-nav">
+        <div class="nav-inner">
+            <div class="brand"><a href="#">Szittya Hungaro</a></div>
+            <ul class="nav-links">
+                <li><a href="#">Haza</a></li>
+                <li><a href="index.html#main_h1">Vásár fia</a></li>
+                <li><a href="#">Rólunk</a></li>
+                <li><a href="#">Kapcsolat</a></li>
+            </ul>
+            <button class="cart-button" type="button">
+                <img src="./public/plus-circle-svgrepo-com.svg" alt="Kosár" style="height: 20px;">
+                <span class="cart-content">Új szerzemény hunzá adása</span>
+            </button>
+        </div>
+        <button class="nav-toggle" type="button" aria-expanded="false">Menü</button>
+    </nav>
+
+    <main class="admin-main">
+        <div class="main-h1 admin-title">
+            <h1>Admin vásárfia kezelő</h1>
+        </div>
+
+        <section class="admin-panel" id="admin-products">
+            <div class="admin-section-header">
+                <div>
+                    <h2>Termékek listája</h2>
+                    <p>Kattints egy sorra, ha szeretnéd betölteni a terméket a szerkesztőbe.</p>
+                </div>
+                <button class="admin-btn secondary" id="refresh-products" type="button">Lista frissítése</button>
+            </div>
+
+            <div class="admin-list-box">
+                <div class="admin-list-head">
+                    <span>Név</span>
+                    <span>Leírás</span>
+                    <span>Ár</span>
+                    <span>Kép linkje</span>
+                    <span>Művelet</span>
+                </div>
+
+                <div class="admin-product-list" id="admin-product-list">
+                    <p class="admin-empty-message">A termékek betöltése folyamatban van...</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="admin-panel admin-editor-section" id="admin-editor">
+            <div class="admin-section-header">
+                <div>
+                    <h2>Kiválasztott termék szerkesztése</h2>
+                    <p id="editor-help">Először válassz ki egy terméket a listából, vagy hozz létre egy újat.</p>
+                </div>
+            </div>
+
+            <form class="card admin-editor-card" id="product-form">
+                <div class="admin-image-side">
+                    <img id="product-preview" class="admin-product-preview" src="https://picsum.photos/id/1081/600/400"
+                        alt="Termék képe">
+
+                    <label class="admin-file-label" for="product-image-file">
+                        Kép feltöltése
+                        <input id="product-image-file" type="file" accept="image/*" disabled>
+                    </label>
+
+                    <label class="admin-field" for="product-image-url">
+                        Kép linkje
+                        <input id="product-image-url" type="url" placeholder="https://..." disabled>
+                    </label>
+                </div>
+
+                <div class="admin-form-side">
+                    <label class="admin-field" for="product-name">
+                        Termék neve
+                        <input id="product-name" type="text" placeholder="Például: Dóna János" disabled required>
+                    </label>
+
+                    <label class="admin-field" for="product-price">
+                        Ár
+                        <input id="product-price" type="number" min="0" step="1" placeholder="1000" disabled required>
+                    </label>
+
+                    <label class="admin-field admin-description-field" for="product-description">
+                        Leírás
+                        <textarea id="product-description" rows="9" placeholder="Ide kerül a termék leírása..." disabled
+                            required></textarea>
+                    </label>
+                </div>
+            </form>
+
+            <div class="admin-actions">
+                <button class="admin-btn" id="edit-product" type="button" disabled>Termék szerkesztése</button>
+                <button class="admin-btn danger" id="delete-selected-product" type="button" disabled>Termék
+                    törlése</button>
+                <button class="admin-btn secondary" id="cancel-edit" type="button" disabled>Mégse</button>
+                <button class="admin-btn success" id="send-product" type="button" disabled>Küldés</button>
+            </div>
+
+            <button class="admin-btn admin-new-product-btn" id="new-product" type="button">
+                Új termék feltöltése az adatbázisba
+            </button>
+        </section>
+    </main>
+
+    <div class="admin-confirm-modal" id="confirm-modal" hidden>
+        <div class="admin-confirm-box">
+            <h3>Biztos vagy benne?</h3>
+            <p id="confirm-message">Biztosan törölni szeretnéd ezt a terméket?</p>
+            <div class="admin-confirm-actions">
+                <button class="admin-btn danger" id="confirm-yes" type="button">Igen</button>
+                <button class="admin-btn secondary" id="confirm-no" type="button">Nem</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-toast" id="admin-toast" hidden></div>
+
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Szittya Hungaro</h3>
+                <p>Autentikus magyar termékek, amely megőrzik a magyar kultúra szellémét.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Gyors Linkek</h4>
+                <ul>
+                    <li><a href="#">Haza</a></li>
+                    <li><a href="#">Vásár fia</a></li>
+                    <li><a href="#">Rólunk</a></li>
+                    <li><a href="#">Kapcsolat</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Kapcsolat</h4>
+                <p>Email: <a href="mailto:info@szittya.hu">info@szittya.hu</a></p>
+                <p>Telefon: <a href="tel:+3611234567">+36 (1) 123-4567</a></p>
+                <p>Cím: <a href="https://maps.google.com/?q=1000,+Hungary" target="_blank"
+                        rel="noopener noreferrer">1000,
+                        Hungary</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Szittya Hungaro. Minden jog fenntartva.</p>
+        </div>
+    </footer>
+
+    <script src="./src/admin.js"></script>
+    <!-- <script src="./src/main.js"></script> -->
+</body>
+
+</html>

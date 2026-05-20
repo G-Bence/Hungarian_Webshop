@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hungarian Webshop</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+
+<body>
+  <nav class="site-nav">
+    <div class="nav-inner">
+      <div class="brand"><a href="#">Szittya Hungaro</a></div>
+      <ul class="nav-links">
+        <li><a href="#">Haza</a></li>
+        <li><a href="index.html#main_h1">Vásár fia</a></li>
+        <li><a href="#">Rólunk</a></li>
+        <li><a href="#">Kapcsolat</a></li>
+      </ul>
+      <button class="cart-button" type="button">
+        <img src="./public/shopping-cart-round-1137-svgrepo-com.svg" alt="Kosár" style="height: 20px;">
+        <span class="cart-content">Kosár</span>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
+    <button class="nav-toggle" type="button" aria-expanded="false">Menü</button>
+  </nav>
+
+  <section class="jumbotron">
+    <div class="jumbotron-overlay">
+      <div class="jumbotron-content">
+        <h1>Magyar bótból magyar cuccok!</h1>
+        <p>Jófajta termékek a magyar kultúra örömére.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="cart-panel" hidden>
+    <div class="cart-panel-header">
+      <h3>Piacolós kosár</h3>
+      <button class="cart-close" type="button">Becsuk</button>
+    </div>
+    <ul class="cart-items"></ul>
+    <p class="cart-empty">Az áldóját, ez még kevés lesz.</p>
+  </div>
+
+  <main>
+    <div class="main-h1" id="main_h1">
+      <h1>Legfainabb okosságok!</h1>
+    </div>
+    <div class="card-row">
+      <div class="card">
+        <!-- data-name="John Doe" data-role="Architect & Engineer" -->
+        <img src="https://picsum.photos/id/1081/600/400" alt="">
+        <div class="container">
+          <h4><b>Dóna János</b></h4>
+          <p>/*Termék leírás, csuhaja*</br>
+            /*Termék leírás, csuhaja*</br>
+            /*Termék leírás, csuhaja*</br>
+            /*Termék leírás, csuhaja*</br>
+            /*Termék leírás, csuhaja*</br>
+            /*Termék leírás, csuhaja*</br>
+            /*Termék leírás, csuhaja*</br>
+            /*Termék leírás, csuhaja*</br>
+            /*Termék leírás, csuhaja*</br></p>
+          <button class="view-product" type="button">Árú megnézése</button>
+        </div>
+
+        <!-- Kosárba pakolás -->
+      </div>
+
+      <div class="card">
+        <!--  data-name="John Doe" data-role="Architect & Engineer" -->
+        <img src="https://picsum.photos/id/1080/600/400" alt="">
+        <div class="container">
+          <h4><b>Dóna János</b></h4>
+          <p>/*Termék leírás, csuhaja*/</p>
+          <button class="view-product" type="button">Árú megnézése</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+
+
+  <!-- Product Pop-up Modal -->
+  <div class="product-modal" hidden>
+    <div class="product-modal-content">
+      <button class="product-modal-close" type="button">&times;</button>
+      <div class="product-modal-body">
+        <div class="product-image-section">
+          <img class="product-modal-image" src="" alt="Product">
+        </div>
+        <div class="product-info-section">
+          <h2 class="product-modal-name"></h2>
+          <p class="product-modal-description"></p>
+          <div class="product-counter-section">
+            <label for="quantity">Mennyiség:</label>
+            <div class="quantity-controls">
+              <button class="quantity-minus" type="button">−</button>
+              <input type="number" id="quantity" class="quantity-input" value="1" min="1" max="999">
+              <button class="quantity-plus" type="button">+</button>
+            </div>
+          </div>
+          <label for="price-tag" class="price-tag-container">Ár: <span class="product-price" id="price-tag">1000 Jó
+              magyar forint</span></label>
+          <button class="add-to-cart" type="button">Kosárba pakolás</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>Szittya Hungaro</h3>
+        <p>Autentikus magyar termékek, amely megőrzik a magyar kultúra szellémét.</p>
+      </div>
+      <div class="footer-section">
+        <h4>Gyors Linkek</h4>
+        <ul>
+          <li><a href="#">Haza</a></li>
+          <li><a href="#">Vásár fia</a></li>
+          <li><a href="#">Rólunk</a></li>
+          <li><a href="#">Kapcsolat</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>Kapcsolat</h4>
+        <p>Email: <a href="mailto:info@szittya.hu">info@szittya.hu</a></p>
+        <p>Telefon: <a href="tel:+3611234567">+36 (1) 123-4567</a></p>
+        <p>Cím: <a href="https://maps.google.com/?q=1000,+Hungary" target="_blank" rel="noopener noreferrer">1000,
+            Hungary</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Szittya Hungaro. Minden jog fenntartva.</p>
+    </div>
+  </footer>
+
+  <script src="./src/main.js"></script>
+</body>
+
+</html>
