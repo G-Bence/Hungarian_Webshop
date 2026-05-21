@@ -224,16 +224,29 @@ body {
 
 .cart-panel {
   position: fixed;
+  visibility: hidden;
   top: 78px;
   right: 24px;
   width: min(360px, 90vw);
   background: #ffffff;
+  transform: scaleY(0);
+  transform-origin: top center;
   border-radius: 16px;
   box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
   padding: 16px;
   border: 1px solid #e6e8ec;
   z-index: 990;
   transition: all 0.3s ease;
+}
+
+.cart-panel-open{
+  transform: scaleY(1);
+  visibility: visible;
+}
+
+.cart-panel-close{
+  transform: scaleY(0);
+  visibility: hidden;
 }
 
 .cart-panel-header {
@@ -979,6 +992,22 @@ main {
   .product-info-section {
     flex: 0 0 100%;
   }
+
+  .product-modal-description{
+      margin: 0 0 180px 0;
+  }
+
+  .price-tag-container{
+    padding-right: 10px;
+  }
+
+
+  .product-price{
+      padding: 3px 10px;
+      font-size: 16px;
+      border-radius: 22px;
+  }
+
 
   .product-modal-close {
     display: flex;

@@ -197,7 +197,7 @@ productAddToCartBtn.addEventListener('click', () => {
 document.querySelectorAll('.view-product').forEach(button => {
   button.addEventListener('click', (e) => {
     console.log('View Product button clicked');
-    console.log('Event target:', e.target.closest('.card'));
+    /*console.log('Event target:', e.target.closest('.card'))*/;
     const card = e.target.closest('.card');
     const productName = card.querySelector('h4 b').textContent;
     const productDescription = card.querySelector('p').textContent;
@@ -223,7 +223,7 @@ const renderCart = () => {
 				<span>${item.quantity} jó darab</span>
 			</div>`;
 
-      console.log(`Rendering cart item: ${item.name} (Quantity: ${item.quantity})`);
+    console.log(`Rendering cart item: ${item.name} (Quantity: ${item.quantity})`);
     cartItems.appendChild(listItem);
 
     ///ATTENTION: I changed the "ROLE" to "QUNTITY" in the cart array
@@ -234,13 +234,20 @@ const renderCart = () => {
 };
 
 const toggleCart = (shouldOpen) => {
-  const isHidden = cartPanel.hasAttribute("hidden");
+  const isHidden = cartPanel.classList.contains("cart-panel-close");
   const willOpen = shouldOpen ?? isHidden;
 
   if (willOpen) {
-    cartPanel.removeAttribute("hidden");
+    /*cartPanel.removeAttribute("hidden");*/
+    cartPanel.classList.remove("cart-panel-close")
+    cartPanel.classList.add("cart-panel-open")
+    /*console.log("Open")*/
+
   } else {
-    cartPanel.setAttribute("hidden", "");
+    cartPanel.classList.remove("cart-panel-open")
+    cartPanel.classList.add("cart-panel-close");
+    /*cartPanel.setAttribute("hidden", "")*/
+    /*console.log("Close")*/
   }
 };
 
