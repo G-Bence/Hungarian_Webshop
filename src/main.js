@@ -1,3 +1,5 @@
+import { fetchProductsFromRetool } from "../src/logic.js";
+
 const navLinks = document.querySelector('.nav-links');
 const nav = document.querySelector('.site-nav');
 const navToggle = document.querySelector('.nav-toggle');
@@ -8,10 +10,12 @@ const cartClose = document.querySelector(".cart-close");
 const cartItems = document.querySelector(".cart-items");
 const cartEmpty = document.querySelector(".cart-empty");
 const cartCount = document.querySelector(".cart-count");
+const cartTotalValue = document.querySelector(".cart-total-value");
 
 const jumbotron = document.querySelector('.jumbotron');
 
-const viewProducts = document.querySelectorAll(".view-product");
+/*const viewProducts = document.querySelectorAll(".view-product");*/
+const productList = document.querySelector(".card-row");
 
 const productModal = document.querySelector('.product-modal');
 const productModalClose = document.querySelector('.product-modal-close');
@@ -19,7 +23,13 @@ const quantityMinus = document.querySelector('.quantity-minus');
 const quantityPlus = document.querySelector('.quantity-plus');
 const quantityInput = document.querySelector('.quantity-input');
 const productAddToCartBtn = document.querySelector('.add-to-cart');
+const productModalPrice = document.querySelector('.product-price');
 
+const DEFAULT_IMAGE_SEED = "hun-shop";
+const buildFallbackImage = (name, index) => {
+  const seed = name ? encodeURIComponent(name) : `${DEFAULT_IMAGE_SEED}-${index}`;
+  return `https://picsum.photos/seed/${seed}/600/400`;
+};
 
 let navTouch = {
   startY: 0,
@@ -152,10 +162,13 @@ setInterval(updateJumbotronBackground, 15000);
 
 
 // Open product modal
-function openProductModal(productName, productDescription, productImage) {
+function openProductModal(productName, productDescription, productImage, productPrice) {
   document.querySelector('.product-modal-name').textContent = productName;
   document.querySelector('.product-modal-description').textContent = productDescription;
   document.querySelector('.product-modal-image').src = productImage;
+  if (productModalPrice) {
+    productModalPrice.textContent = `${productPrice} Jó magyar forint`;
+  }
   quantityInput.value = 1;
   productModal.removeAttribute('hidden');
 }
@@ -193,35 +206,107 @@ productAddToCartBtn.addEventListener('click', () => {
   closeProductModal();
 });
 
-// Update card buttons to open modal
-document.querySelectorAll('.view-product').forEach(button => {
-  button.addEventListener('click', (e) => {
+// Render product cards from Retool
+const renderProducts = (products) => {
+  if (!productList) {
+    return;
+  }
+
+  if (!Array.isArray(products) || products.length === 0) {
+    productList.innerHTML = "<p class=\"products-loading\">Nincs elerheto termek.</p>";
+    return;
+  }
+
+  productList.innerHTML = products
+    .map((product, index) => {
+      const safeName = product.name || "Termek";
+      const safeDescription = product.description || "";
+      const safePrice = Number(product.price) || 0;
+      const safeImage = product.image || buildFallbackImage(safeName, index);
+
+      return `
+        <div class="card" data-name="${safeName}" data-description="${safeDescription}" data-price="${safePrice}" data-image="${safeImage}">
+          <img src="${safeImage}" alt="${safeName}">
+          <div class="container">
+            <h4><b>${safeName}</b></h4>
+            <p>${safeDescription}</p>
+            <div class="card-price">${safePrice} Jó magyar forint</div>
+            <button class="view-product" type="button">Árú megnézése</button>
+          </div>
+        </div>`;
+    })
+    .join("");
+};
+
+const loadProducts = async () => {
+  if (!productList) {
+    return;
+  }
+
+  productList.innerHTML = "<p class=\"products-loading\">Termekek betoltese...</p>";
+
+  try {
+    const products = await fetchProductsFromRetool();
+    renderProducts(products);
+  } catch (error) {
+    console.error(error);
+    productList.innerHTML = "<p class=\"products-loading\">Nem sikerult betolteni a termekeket.</p>";
+  }
+};
+
+// Update card buttons to open modal -- ?
+if (productList) {
+  productList.addEventListener('click', (e) => {
+    const button = e.target.closest('.view-product');
+    if (!button) {
+      return;
+    }
+
     console.log('View Product button clicked');
-    /*console.log('Event target:', e.target.closest('.card'))*/;
-    const card = e.target.closest('.card');
-    const productName = card.querySelector('h4 b').textContent;
-    const productDescription = card.querySelector('p').textContent;
-    const productImage = card.querySelector('img').src;
-    openProductModal(productName, productDescription, productImage);
+    const card = button.closest('.card');
+    if (!card) {
+      return;
+    }
+
+    const productName = card.dataset.name || "Termék";
+    const productDescription = card.dataset.description || "";
+    const productImage = card.dataset.image || DEFAULT_PRODUCT_IMAGE;
+    const productPrice = card.dataset.price || 0;
+    openProductModal(productName, productDescription, productImage, productPrice);
   });
-});
+}
 
 
 const cart = [];
 
 //It would store the name/id of the item and the quantity, by multiplying the price by the quantity, we can get the total price of the cart. We can also add a remove button for each item in the cart, which would remove the item from the cart and update the total price accordingly.
 
+const parsePriceValue = (priceText) => {
+  const matched = String(priceText).match(/[0-9]+/g);
+  if (!matched) {
+    return 0;
+  }
+  return parseInt(matched.join(""), 10);
+};
+
 const renderCart = () => {
   cartItems.innerHTML = "";
 
-  cart.forEach((item) => {
+  cart.forEach((item, index) => {
     const listItem = document.createElement("li");
     listItem.className = "cart-item";
     listItem.innerHTML = `
-			<div>
+			<div class="cart-item-info">
 				<strong>${item.name}</strong>
 				<span>${item.quantity} jó darab</span>
-			</div>`;
+			</div>
+			<button class="cart-item-remove" type="button" aria-label="Remove ${item.name}">Törlés</button>`;
+
+    const removeButton = listItem.querySelector(".cart-item-remove");
+    removeButton.addEventListener("click", () => {
+      cart.splice(index, 1);
+      renderCart();
+    });
 
     console.log(`Rendering cart item: ${item.name} (Quantity: ${item.quantity})`);
     cartItems.appendChild(listItem);
@@ -231,6 +316,13 @@ const renderCart = () => {
 
   cartEmpty.hidden = cart.length > 0;
   cartCount.textContent = String(cart.map((item) => parseInt(item.quantity)).reduce((a, b) => a + b, 0));
+   const cartTotal = cart
+    .map((item) => parseInt(item.quantity) * parseInt(item.price || 0))
+    .reduce((a, b) => a + b, 0);
+
+  if (cartTotalValue) {
+    cartTotalValue.textContent = `${cartTotal} Jó magyar forint`;
+  }
 };
 
 const toggleCart = (shouldOpen) => {
@@ -258,9 +350,11 @@ productAddToCartBtn.addEventListener("click", () => {
   }
 
   const name = pModal.querySelector('.product-modal-name').textContent || "Item";
-  const quantity = pModal.querySelector('.quantity-input').value || 1;
+  const quantity = parseInt(pModal.querySelector('.quantity-input').value || 1);
+  const priceText = pModal.querySelector('.product-price')?.textContent || "0";
+  const price = parsePriceValue(priceText);
 
-  cart.push({ name, quantity });
+  cart.push({name, quantity, price});
   renderCart();
   toggleCart(true);
 });
@@ -274,3 +368,4 @@ cartClose.addEventListener("click", () => {
 });
 
 renderCart();
+loadProducts();

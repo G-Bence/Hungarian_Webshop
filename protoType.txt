@@ -213,3 +213,12 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
   });
 });
 -->
+
+
+
+
+					<span>${name}</span>
+					<span>${description}</span>
+					<span>${price}</span>
+					<span>${imageUrl}</span>
+					<span>—</span>

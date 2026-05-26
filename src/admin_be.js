@@ -1,4 +1,4 @@
-const API_URL = "https://retoolapi.dev/MDEeXU/data";
+const API_URL = "https://retoolapi.dev/IY9OP1/data";
 const API_KEY = "";
 
 const MAX_IMAGE_BYTES = 350 * 1024;
@@ -96,7 +96,7 @@ const estimateDataUrlBytes = (dataUrl) => {
 const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
 	const reader = new FileReader();
 	reader.onload = () => resolve(String(reader.result || ""));
-	reader.onerror = () => reject(new Error("Nem sikerült beolvasni a képet."));
+	reader.onerror = () => reject(new Error("Nem sikerult beolvasni a kepet."));
 	reader.readAsDataURL(file);
 });
 
@@ -112,7 +112,7 @@ const resizeDataUrl = (dataUrl) => new Promise((resolve, reject) => {
 		canvas.height = targetHeight;
 		const ctx = canvas.getContext("2d");
 		if (!ctx) {
-			reject(new Error("Nem sikerült feldolgozni a képet."));
+			reject(new Error("Nem sikerult feldolgozni a kepet."));
 			return;
 		}
 
@@ -120,7 +120,7 @@ const resizeDataUrl = (dataUrl) => new Promise((resolve, reject) => {
 		const resized = canvas.toDataURL("image/jpeg", IMAGE_QUALITY);
 		resolve(resized);
 	};
-	image.onerror = () => reject(new Error("Nem sikerült beolvasni a képet."));
+	image.onerror = () => reject(new Error("Nem sikerult beolvasni a kepet."));
 	image.src = dataUrl;
 });
 
@@ -209,7 +209,7 @@ const renderList = (rows) => {
 	if (!adminList) return;
 
 	if (!Array.isArray(rows) || rows.length === 0) {
-		adminList.innerHTML = "<p class=\"admin-empty-message\">Nincs termék.</p>";
+		adminList.innerHTML = "<p class=\"admin-empty-message\">Nincs termek.</p>";
 		return;
 	}
 
@@ -219,14 +219,14 @@ const renderList = (rows) => {
 			const description = row.leiras ?? "";
 			const price = row.ar ?? "";
 			const imageUrl = row.kep ?? "";
-			console.log(imageUrl)
 
 			return `
-				<div class="admin-list-row admin-product-row" data-id="${row.id}" data-name="${name}" data-description="${description}" data-price="${price}" data-image="${imageUrl}">
-				<span class="admin-product-name" title="${name}">${name}</span>
-      			<span class="admin-product-description" title="${description}">${description}</span>
-      			<span class="admin-product-price">${price} Ft</span>
-      			<span class="admin-product-image-link" title="${imageUrl}">${imageUrl}</span>
+						<div class="admin-list-row" data-id="${row.id}" data-name="${name}" data-description="${description}" data-price="${price}" data-image="${imageUrl}">
+					<span>${name}</span>
+					<span>${description}</span>
+					<span>${price}</span>
+					<span>${imageUrl}</span>
+					<span>—</span>
 				</div>`;
 		})
 		.join("");
@@ -234,14 +234,14 @@ const renderList = (rows) => {
 
 const loadProducts = async () => {
 	if (!adminList) return;
-	adminList.innerHTML = "<p class=\"admin-empty-message\">Termékek betöltese...</p>";
+	adminList.innerHTML = "<p class=\"admin-empty-message\">Termekek betoltese...</p>";
 
 	try {
 		const rows = await fetchProducts();
 		renderList(rows);
 	} catch (error) {
 		console.error(error);
-		adminList.innerHTML = "<p class=\"admin-empty-message\">Nem sikerült betölteni.</p>";
+		adminList.innerHTML = "<p class=\"admin-empty-message\">Nem sikerult betolteni.</p>";
 	}
 };
 
@@ -252,7 +252,7 @@ if (newProductButton) {
 		setFormEnabled(true);
 		resetForm();
 		if (editorHelp) {
-			editorHelp.textContent = "Töltsd ki a mezőket és kattints a Küldes gombra.";
+			editorHelp.textContent = "Toltsd ki a mezoket es kattints a Kuldes gombra.";
 		}
 	});
 }
@@ -276,7 +276,7 @@ if (adminList) {
 		setSelectedProduct(selectedRow);
 		setFormEnabled(false);
 		if (editorHelp) {
-			editorHelp.textContent = "Kattints a Termék szerkesztése gombra a módosításokhoz.";
+			editorHelp.textContent = "Kattints a Termek szerkesztese gombra a modositasokhoz.";
 		}
 	});
 }
@@ -284,14 +284,14 @@ if (adminList) {
 if (editButton) {
 	editButton.addEventListener("click", () => {
 		if (!selectedProductId) {
-			showToast("Először válassz ki egy terméket.", true);
+			showToast("Eloszor valassz ki egy termeket.", true);
 			return;
 		}
 
 		editMode = "edit";
 		setFormEnabled(true);
 		if (editorHelp) {
-			editorHelp.textContent = "Módosítsd a mezőket és kattints a Küldes gombra.";
+			editorHelp.textContent = "Modositsd a mezoket es kattints a Kuldes gombra.";
 		}
 	});
 }
@@ -299,7 +299,7 @@ if (editButton) {
 if (deleteButton) {
 	deleteButton.addEventListener("click", () => {
 		if (!selectedProductId) {
-			showToast("Először", true);
+			showToast("Eloszor valassz ki egy termeket.", true);
 			return;
 		}
 
@@ -320,13 +320,13 @@ if (confirmNo) {
 if (confirmYes) {
 	confirmYes.addEventListener("click", async () => {
 		if (!selectedProductId) {
-			showToast("Először válassz ki egy terméket", true);
+			showToast("Eloszor valassz ki egy termeket.", true);
 			return;
 		}
 
 		try {
 			await deleteProduct(selectedProductId);
-			showToast("Termék törölve.");
+			showToast("Termek torolve.");
 			selectedProductId = null;
 			editMode = "view";
 			resetForm();
@@ -334,7 +334,7 @@ if (confirmYes) {
 			await loadProducts();
 		} catch (error) {
 			console.error(error);
-			showToast("Hiba törtent a törlésnél.", true);
+			showToast("Hiba tortent a torlesnel.", true);
 		} finally {
 			if (confirmModal) {
 				confirmModal.hidden = true;
@@ -350,7 +350,7 @@ if (cancelButton) {
 		resetForm();
 		selectedProductId = null;
 		if (editorHelp) {
-			editorHelp.textContent = "Először válassz ki egy terméket a listából, vagy hozz létre egy újat.";
+			editorHelp.textContent = "Eloszor valassz ki egy termeket a listabol, vagy hozz letre egy ujat.";
 		}
 	});
 }
@@ -371,7 +371,7 @@ if (imageFileInput && imageUrlInput && previewImage) {
 		}
 
 		if (!file.type.startsWith("image/")) {
-			showToast("Csak kép fájl tölthető fel.", true);
+			showToast("Csak kep fajl toltheto fel.", true);
 			imageFileInput.value = "";
 			return;
 		}
@@ -382,7 +382,7 @@ if (imageFileInput && imageUrlInput && previewImage) {
 			const estimatedBytes = estimateDataUrlBytes(resized);
 
 			if (estimatedBytes > MAX_IMAGE_BYTES) {
-				showToast("A kep túl nagy. Válassz kisebbet.", true);
+				showToast("A kep tul nagy. Valassz kisebbet.", true);
 				imageFileInput.value = "";
 				return;
 			}
@@ -392,7 +392,7 @@ if (imageFileInput && imageUrlInput && previewImage) {
 			previewImage.src = resized;
 		} catch (error) {
 			console.error(error);
-			showToast("Nem sikerült beolvasni a képet.", true);
+			showToast("Nem sikerult beolvasni a kepet.", true);
 		}
 	});
 }
@@ -405,7 +405,7 @@ if (sendButton) {
 		const imageUrl = imageUrlInput?.value.trim() || "";
 
 		if (!name || !description || !price) {
-			showToast("Töltsd ki a nevét, leírást és árat.", true);
+			showToast("Toltsd ki a nevet, leirast es arat.", true);
 			return;
 		}
 
@@ -422,10 +422,10 @@ if (sendButton) {
 		try {
 			if (editMode === "edit" && selectedProductId) {
 				await updateProduct(selectedProductId, payload);
-				showToast("Termék frissitve.");
+				showToast("Termek frissitve.");
 			} else {
 				await createProduct(payload);
-				showToast("Termék hozzaadva.");
+				showToast("Termek hozzaadva.");
 			}
 			resetForm();
 			setFormEnabled(false);
@@ -434,7 +434,7 @@ if (sendButton) {
 			await loadProducts();
 		} catch (error) {
 			console.error(error);
-			showToast("Hiba törtent a küldésnél.", true);
+			showToast("Hiba tortent a kuldesnel.", true);
 		}
 	});
 }
